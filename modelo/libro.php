@@ -1,14 +1,14 @@
 <?php
 require_once __DIR__ . '/../core/Database.php';
 
-class Persona {
-    private const NOMBRE_CLASE = 'Persona';
+class Libro {
+    private const NOMBRE_CLASE = 'Libro';
     
     public $id;
-    public $nombre;
-    public $email;
-    public $edad;
-    public $telefono;
+    public $titulo;
+    public $autor;
+    public $anioPublicacion;
+    public $cantidadPaginas;
 
     public function __construct() {
         // Constructor vacío para que FETCH_CLASS funcione correctamente
@@ -21,13 +21,13 @@ class Persona {
     public static function obtenerTodas() {
         try {
             $db = Database::getInstance()->getConnection();
-            $stmt = $db->prepare('SELECT id, nombre, email, edad, telefono FROM personas ORDER BY id DESC');
+            $stmt = $db->prepare('SELECT id, titulo, autor, anioPublicacion, cantidadPaginas FROM libros ORDER BY id DESC');
             $stmt->execute();
             
             // PDO mapea automáticamente las columnas a las propiedades de la clase
             return $stmt->fetchAll(PDO::FETCH_CLASS, self::NOMBRE_CLASE);
         } catch (PDOException $e) {
-            error_log("Error al obtener personas: " . $e->getMessage());
+            error_log("Error al obtener libros: " . $e->getMessage());
             return [];
         }
     }
@@ -39,14 +39,14 @@ class Persona {
     public static function obtenerPorId($id) {
         try {
             $db = Database::getInstance()->getConnection();
-            $stmt = $db->prepare('SELECT id, nombre, email, edad, telefono FROM personas WHERE id = :id');
+            $stmt = $db->prepare('SELECT id, titulo, autor, anioPublicacion, cantidadPaginas FROM libros WHERE id = :id');
             $stmt->execute([':id' => $id]);
             
             // PDO mapea automáticamente las columnas a las propiedades de la clase
             $stmt->setFetchMode(PDO::FETCH_CLASS, self::NOMBRE_CLASE);
             return $stmt->fetch();
         } catch (PDOException $e) {
-            error_log("Error al obtener persona: " . $e->getMessage());
+            error_log("Error al obtener libro: " . $e->getMessage());
             return null;
         }
     }
@@ -54,19 +54,19 @@ class Persona {
     /**
      * Agregar una nueva persona
      */
-    public static function agregar($nombre, $email, $edad) {
+    public static function agregar($titulo, $autor, $anioPublicacion, $cantidadPaginas) {
         try {
             $db = Database::getInstance()->getConnection();
-            $stmt = $db->prepare('INSERT INTO personas (nombre, email, edad, telefono) VALUES (:nombre, :email, :edad, :telefono)');
+            $stmt = $db->prepare('INSERT INTO libros (titulo, autor, anioPublicacion, cantidadPaginas) VALUES (:titulo, :autor, :anioPublicacion, :cantidadPaginas)');
             
             return $stmt->execute([
-                ':nombre' => $nombre,
-                ':email' => $email,
-                ':edad' => $edad,
-                ':telefono' => $telefono
+                ':titulo' => $titulo,
+                ':autor' => $autor,
+                ':anioPublicacion' => $anioPublicacion,
+                ':cantidadPaginas' => $cantidadPaginas
             ]);
         } catch (PDOException $e) {
-            error_log("Error al agregar persona: " . $e->getMessage());
+            error_log("Error al agregar libro: " . $e->getMessage());
             return false;
         }
     }
@@ -74,20 +74,20 @@ class Persona {
     /**
      * Editar una persona existente
      */
-    public static function editar($id, $nombre, $email, $edad, $telefono) {
+    public static function editar($id, $titulo, $autor, $anioPublicacion, $cantidadPaginas) {
         try {
             $db = Database::getInstance()->getConnection();
-            $stmt = $db->prepare('UPDATE personas SET nombre = :nombre, email = :email, edad = :edad, telefono = :telefono WHERE id = :id');
+            $stmt = $db->prepare('UPDATE libros SET titulo = :titulo, autor = :autor, anioPublicacion = :anioPublicacion, cantidadPaginas = :cantidadPaginas WHERE id = :id');
             
             return $stmt->execute([
                 ':id' => $id,
-                ':nombre' => $nombre,
-                ':email' => $email,
-                ':edad' => $edad,
-                ':telefono' => $telefono
+                ':titulo' => $titulo,
+                ':autor' => $autor,
+                ':anioPublicacion' => $anioPublicacion,
+                ':cantidadPaginas' => $cantidadPaginas
             ]);
         } catch (PDOException $e) {
-            error_log("Error al editar persona: " . $e->getMessage());
+            error_log("Error al editar libro: " . $e->getMessage());
             return false;
         }
     }
@@ -98,11 +98,11 @@ class Persona {
     public static function eliminar($id) {
         try {
             $db = Database::getInstance()->getConnection();
-            $stmt = $db->prepare('DELETE FROM personas WHERE id = :id');
+            $stmt = $db->prepare('DELETE FROM libros WHERE id = :id');
             
             return $stmt->execute([':id' => $id]);
         } catch (PDOException $e) {
-            error_log("Error al eliminar persona: " . $e->getMessage());
+            error_log("Error al eliminar libro: " . $e->getMessage());
             return false;
         }
     }
