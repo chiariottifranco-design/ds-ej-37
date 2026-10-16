@@ -1,28 +1,28 @@
 <?php
-require_once '../modelo/persona.php';
+require_once '../modelo/libro.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $accion = $_POST['accion'] ?? '';
-    $nombre = $_POST['nombre'] ?? '';
-    $email = $_POST['email'] ?? '';
-    $edad = $_POST['edad'] ?? '';
-    $telefono = $_POST['telefono'] ?? '';
+    $titulo = $_POST['titulo'] ?? '';
+    $autor = $_POST['autor'] ?? '';
+    $anioPublicacion = $_POST['anioPublicacion'] ?? '';
+    $cantidadPaginas = $_POST['cantidadPaginas'] ?? '';
     $id = $_POST['id'] ?? '';
 
     if ($accion === 'agregar') {
-        Persona::agregar($nombre, $email, $edad, $telefono);
+        Libro::agregar($titulo, $autor, $anioPublicacion, $cantidadPaginas);
         header('Location: vistas/listar.php');
         exit;
     }
 
     if ($accion === 'editar') {
-        Persona::editar($id, $nombre, $email, $edad, $telefono);
+        Libro::editar($titulo, $autor, $anioPublicacion, $cantidadPaginas);
         header('Location: vistas/listar.php');
         exit;
     }
 
     if ($accion === 'eliminar') {
-        Persona::eliminar($id);
+        Libro::eliminar($id);
         header('Location: vistas/listar.php');
         exit;
     }
