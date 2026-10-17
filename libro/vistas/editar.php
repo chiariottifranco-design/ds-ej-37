@@ -1,4 +1,5 @@
-php require_once '../../modelo/libro.php'; 
+<?php
+require_once '../../modelo/libro.php'; 
 $id = $_GET['id'] ?? null;
 $libro = $id ? libro::obtenerPorId($id) : null;
 $titulo = $libro ? 'Editar Libro' : 'Agregar Libro';
